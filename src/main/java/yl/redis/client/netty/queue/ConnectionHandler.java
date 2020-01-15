@@ -9,7 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class ConnectionHandler extends SimpleChannelInboundHandler<byte[]> {
     private CallBack cb;
-    private int pushNum;
+    private int pushNum=1;
     private StringBuilder sb = new StringBuilder();
 
     public ConnectionHandler(String key, CallBack cb) {
@@ -25,7 +25,8 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) {
         cb.call(new String(bytes));
-        if (pushNum == 0) {
+        if (pushNum == 1) {
+            pushNum=15;
             channelHandlerContext.channel().writeAndFlush(sb.toString());
         } else {
             pushNum--;
